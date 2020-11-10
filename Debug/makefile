@@ -46,8 +46,8 @@ usart_DMA.bin \
 all: usart_DMA.elf secondary-outputs
 
 # Tool invocations
-usart_DMA.elf: $(OBJS) $(USER_OBJS) C:\Users\vladisvova\Desktop\vrs_cvicenie_7-zadanie_cv7\STM32F303K8TX_FLASH.ld
-	arm-none-eabi-gcc -o "usart_DMA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\vladisvova\Desktop\vrs_cvicenie_7-zadanie_cv7\STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="usart_DMA.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+usart_DMA.elf: $(OBJS) $(USER_OBJS) C:\Users\Peter\Documents\GitHub\Cvicenie7_VRS\STM32F303K8TX_FLASH.ld
+	arm-none-eabi-gcc -o "usart_DMA.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"C:\Users\Peter\Documents\GitHub\Cvicenie7_VRS\STM32F303K8TX_FLASH.ld" --specs=nosys.specs -Wl,-Map="usart_DMA.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

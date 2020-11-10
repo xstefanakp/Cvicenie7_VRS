@@ -39,7 +39,7 @@ void proccesDmaData(uint8_t sign);
 /* Space for your global variables. */
 
 	// type your global variables here:
-
+int upper = 0, lower = 0;
 
 int main(void)
 {
@@ -112,6 +112,34 @@ void SystemClock_Config(void)
 void proccesDmaData(uint8_t sign)
 {
 	/* Process received data */
+	/* Process received data */
+
+	// type your algorithm here:
+
+	int i=0;
+	int size = sizeof bufferUSART2dma / sizeof bufferUSART2dma[0];
+	for(int j=0;j<size;){
+
+		if(bufferUSART2dma[j]=='#'){
+
+			i=j;
+
+			while (bufferUSART2dma[i] != '$') {
+				if (bufferUSART2dma[i] >= 'A' && bufferUSART2dma[i] <= 'Z')
+					upper++;
+				if (bufferUSART2dma[i] >= 'a' && bufferUSART2dma[i] <= 'z')
+					lower++;
+				i++;
+
+				if(i==35)
+					break;
+
+			}
+
+		}
+
+
+	}
 
 		// type your algorithm here:
 }
