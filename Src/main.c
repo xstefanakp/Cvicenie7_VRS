@@ -58,16 +58,28 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* Space for your local variables, callback registration ...*/
-
+  	  char LedOn[6] = "ON ";
+  	  char LedOff[7] = "OFF ";
   	  //type your code here:
 
   while (1)
   {
-	  /* Periodic transmission of information about DMA Rx buffer state.
-	   * Transmission frequency - 5Hz.
-	   * Message format - "Buffer capacity: %d bytes, occupied memory: %d bytes, load [in %]: %f%"
-	   * Example message (what I wish to see in terminal) - Buffer capacity: 1000 bytes, occupied memory: 231 bytes, load [in %]: 23.1%
-	   */
+	  if((LL_GPIO_ReadInputPort(GPIOB) & (1 << 3)) >> 3){
+
+
+	 	  			for(int i = 0; i < 4; i++){
+	 	  				LL_USART_TransmitData8(USART2, LedOn[i]);
+	 	  				LL_mDelay(50);
+	 	  			}
+
+	 	  		}else{
+	 	  			for(int i = 0; i < 5; i++){
+	 	  				LL_USART_TransmitData8(USART2, LedOff[i]);
+	 	  				LL_mDelay(50);
+	 	  			}
+	 	  		}
+	 	  		LL_mDelay(1000);
+	 	  	}
 
   	  	  	  //type your code here:
   }
