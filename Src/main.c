@@ -119,36 +119,55 @@ void SystemClock_Config(void)
 void proccesDmaData(uint8_t sign)
 {
 	/* Process received data */
-	/* Process received data */
+	static char letters[DMA_USART2_BUFFER_SIZE];
+	static int letter_counter = 0;
+	static bool working = 0;
+	int lowers, uppers;
 
-	// type your algorithm here:
+	//first sign?
+	if(sign == '#' && working != 1) {
+		working = 1;
+		letter_counter = 0;
+	}
 
-	int i=0;
-	int size = sizeof bufferUSART2dma / sizeof bufferUSART2dma[0];
-	for(int j=0;j<size;){
+	//count and add letters
+	if(working == 1) {
+		letter_counter+= 1;
+		letters[letter_counter] = sign;
+	}
 
-		if(bufferUSART2dma[j]=='#'){
+	//finishing sign?
+	if(sign == '$' && letter_counter <= 35) {
+		working = 0;
+		lowers = 0, uppers = 0;
+		for(int i = 0; i < letter_counter; i += 1) {
+			char c = letters[i];
 
-			i=j;
+			if( c >= 'A' && c <= 'Z') {
+				uppers +=1;
+			}
 
-			while (bufferUSART2dma[i] != '$') {
-				if (bufferUSART2dma[i] >= 'A' && bufferUSART2dma[i] <= 'Z')
-					upper++;
-				if (bufferUSART2dma[i] >= 'a' && bufferUSART2dma[i] <= 'z')
-					lower++;
-				i++;
-
-				if(i==35)
-					break;
-
+			if(c >= 'a' && c <= 'z') {
+				lowers +=1;
 			}
 
 		}
 
 
+		size_t needed = snprintf(NULL, 0,"Lower letters: %d, Upper Letters: %d \n \n",lowers,uppers);
+		char* info_about_letters = (char*)malloc(needed);
+		snprintf(info_about_letters, needed,"Lower letters: %d, Upper Letters: %d \n \n",lowers,uppers);
+		USART2_PutBuffer(info_about_letters, needed);
+
+		free(info_about_letters);
+		memset(letters, 0, sizeof(letters));
 	}
 
-		// type your algorithm here:
+	//empty array
+	if(letter_counter >= 35) {
+		working = 0;
+		memset(letters, 0, sizeof(letters));
+	}
 }
 
 
