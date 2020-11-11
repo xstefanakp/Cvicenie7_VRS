@@ -39,7 +39,18 @@ void proccesDmaData(uint8_t sign);
 /* Space for your global variables. */
 
 	// type your global variables here:
-int upper = 0, lower = 0;
+int DMA_position = 0;
+
+void printInfoToSerial(){
+
+	size_t needed = snprintf(NULL, 0,"Buffer capacity: %d bytes, occupied memory: %d bytes, load: %d percentage \n \n",DMA_USART2_BUFFER_SIZE, DMA_position, 100*DMA_position/DMA_USART2_BUFFER_SIZE);
+	char* info_about_buffer = (char*)malloc(needed);
+	snprintf(info_about_buffer, needed,"Buffer capacity: %d bytes, occupied memory: %d bytes, load: %d percentage \n \n", DMA_USART2_BUFFER_SIZE, DMA_position, 100*DMA_position/DMA_USART2_BUFFER_SIZE);
+	USART2_PutBuffer(info_about_buffer, needed);
+
+	free(info_about_buffer);
+
+}
 
 int main(void)
 {
@@ -64,24 +75,9 @@ int main(void)
 
   while (1)
   {
-	  if((LL_GPIO_ReadInputPort(GPIOB) & (1 << 3)) >> 3){
+	 printInfoToSerial();
 
-
-	 	  			for(int i = 0; i < 4; i++){
-	 	  				LL_USART_TransmitData8(USART2, LedOn[i]);
-	 	  				LL_mDelay(50);
-	 	  			}
-
-	 	  		}else{
-	 	  			for(int i = 0; i < 5; i++){
-	 	  				LL_USART_TransmitData8(USART2, LedOff[i]);
-	 	  				LL_mDelay(50);
-	 	  			}
-	 	  		}
-	 	  		LL_mDelay(1000);
-	 	  	}
-
-  	  	  	  //type your code here:
+		LL_mDelay(200);
   }
   /* USER CODE END 3 */
 }
