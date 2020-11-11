@@ -69,9 +69,8 @@ int main(void)
   MX_USART2_UART_Init();
 
   /* Space for your local variables, callback registration ...*/
-  	  char LedOn[6] = "ON ";
-  	  char LedOff[7] = "OFF ";
-  	  //type your code here:
+ 
+ USART2_RegisterCallback(proccesDmaData);
 
   while (1)
   {
