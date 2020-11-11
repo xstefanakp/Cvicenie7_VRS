@@ -80,7 +80,16 @@ void MX_USART2_UART_Init(void)
   LL_DMA_SetMemoryIncMode(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MEMORY_INCREMENT);
   LL_DMA_SetPeriphSize(DMA1, LL_DMA_CHANNEL_6, LL_DMA_PDATAALIGN_BYTE);
   LL_DMA_SetMemorySize(DMA1, LL_DMA_CHANNEL_6, LL_DMA_MDATAALIGN_BYTE);
+  LL_DMA_ConfigAddresses(	DMA1, LL_DMA_CHANNEL_6,
+  						 	LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_RECEIVE),
+  							(uint32_t)bufferUSART2dma,
+  							LL_DMA_GetDataTransferDirection(DMA1, LL_DMA_CHANNEL_6));
 
+    LL_DMA_SetDataLength(DMA1, LL_DMA_CHANNEL_6, DMA_USART2_BUFFER_SIZE);
+    LL_DMA_EnableChannel(DMA1, LL_DMA_CHANNEL_6);
+    LL_USART_EnableDMAReq_RX(USART2);
+
+    LL_DMA_EnableIT_TC(DMA1, LL_DMA_CHANNEL_6);
 
   /* USART2_TX Init */
 
@@ -167,8 +176,4 @@ void USART2_CheckDmaReception(void)
 
 		DMA_position = end_pos;
 }
-
-
-
-
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
