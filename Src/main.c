@@ -23,6 +23,8 @@
 #include "dma.h"
 #include "usart.h"
 #include "gpio.h"
+#include <stdio.h>
+#include <stdbool.h>
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
