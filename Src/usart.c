@@ -97,6 +97,7 @@ void MX_USART2_UART_Init(void)
   LL_DMA_SetPeriphAddress(DMA1, LL_DMA_CHANNEL_7, LL_USART_DMA_GetRegAddr(USART2, LL_USART_DMA_REG_DATA_TRANSMIT));
   LL_USART_EnableDMAReq_TX(USART2);
 
+  LL_DMA_EnableIT_TE(DMA1, LL_DMA_CHANNEL_7);
 
 
   /* USART2 interrupt Init */
@@ -117,10 +118,8 @@ void MX_USART2_UART_Init(void)
   /* Enable USART2 peripheral and interrupts*/
 
   	  //type your code here:
-#if !POLLING
+
   LL_USART_EnableIT_IDLE(USART2);
-#endif
-  LL_USART_ConfigAsyncMode(USART2);
   LL_USART_Enable(USART2);
 }
 
@@ -148,30 +147,25 @@ void USART2_CheckDmaReception(void)
 {
 	//type your implementation here
 	
-		if(USART2_ProcessData == 0) return;
+	if(USART2_ProcessData == 0) return;
 
-		static uint16_t old_pos = 0;
+		extern int DMA_position;
+		static int old_pos = 0;
+		int len = LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6);
+		int end_pos = DMA_USART2_BUFFER_SIZE - len;
 
-		uint16_t pos = DMA_USART2_BUFFER_SIZE - LL_DMA_GetDataLength(DMA1, LL_DMA_CHANNEL_6);
 
-		if (pos != old_pos)
-		{
-			if (pos > old_pos)
-			{
-				USART2_ProcessData(&bufferUSART2dma[old_pos], pos - old_pos);
+
+		if(end_pos > old_pos) {
+
+			for(int i = old_pos; i<end_pos; i+=1) {
+				USART2_ProcessData(bufferUSART2dma[i]);
 			}
-			else
-			{
-				USART2_ProcessData(&bufferUSART2dma[old_pos], DMA_USART2_BUFFER_SIZE - old_pos);
+			old_pos = end_pos;
 
-				if (pos > 0)
-				{
-					USART2_ProcessData(&bufferUSART2dma[0], pos);
-				}
-			}
 		}
 
-		old_pos = pos;
+		DMA_position = end_pos;
 }
 
 
